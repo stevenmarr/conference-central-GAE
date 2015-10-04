@@ -1,0 +1,1330 @@
+Conference API v0.1 
+
+Documentation
+
+=========================================================================================
+Conference
+*****************************************************************************************
+NAME
+	createConference
+
+DESCRIPTION
+	If a registered user is logged in by Google OAUTH2, creates a new conference object and emails user with a confirmation email
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference
+
+PARAMETERS
+	name 			required, the conference name, must be a unique value
+    description     optional, a brief description of the conference
+    topics          optional, a list of conference topics
+    city            optional, conference city
+    startDate       optional, conference start date YYYY-MM-DD
+    maxAttendees    optional, max attendees for conference
+    endDate         optional, conference end date format YYYY-MM-DD
+ 
+
+METHOD
+	POST
+
+RETURNS
+	200 OK
+	A dictionary with information on the created conference
+		Sample JSON response
+		{
+		 "alt": "json",
+		 "city": "Denver",
+		 "description": "A python web developer gathering.",
+		 "endDate": "2016-05-06",
+		 "maxAttendees": "10000",
+		 "month": "5",
+		 "name": "PyWeb",
+		 "organizerUserId": "marr.stevenmarr@gmail.com",
+		 "seatsAvailable": "0",
+		 "startDate": "2016-05-04",
+		 "topics": [
+		  "Web Development",
+		  "Python"
+		 ]
+		}
+	
+ERRORS 
+		401 Unauthorized
+		{
+		 "error": {
+		  "code": 401,
+		  "errors": [
+		   {
+		    "domain": "global",
+		    "message": "Authorization required",
+		    "reason": "required"
+		   }
+		  ],
+		  "message": "Authorization required"
+		 }
+		}
+
+		400 Bad Request
+		{
+		 "error": {
+		  "code": 400,
+		  "errors": [
+		   {
+		    "domain": "global",
+		    "message": "Conference 'name' field required",
+		    "reason": "badRequest"
+		   }
+		  ],
+		  "message": "Conference 'name' field required"
+		 }
+		}
+*****************************************************************************************
+NAME
+	updateConference
+
+DESCRIPTION
+	Update conference w/provided fields & return w/updated info.
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conference/<websafeConferenceKey>
+
+PARAMETERS
+	websafeConferenceKey  required, the datastore key of the conference to update
+	name 			optional, the conference name
+    description     optional, a brief description of the conference
+    topics          optional, a list of conference topics
+    city            optional, conference city
+    startDate       optional, conference start date YYYY-MM-DD
+    maxAttendees    optional, max attendees for conference
+    endDate         optional, conference end date format YYYY-MM-DD
+ 
+
+METHOD
+	POST
+
+RETURNS
+	200 OK
+	A dictionary with information on the updated conference
+		Sample JSON response
+		{
+		 "alt": "json",
+		 "city": "Denver",
+		 "description": "A python web developer gathering.",
+		 "endDate": "2016-05-06",
+		 "maxAttendees": "10000",
+		 "month": "5",
+		 "name": "PyWeb",
+		 "organizerUserId": "marr.stevenmarr@gmail.com",
+		 "seatsAvailable": "0",
+		 "startDate": "2016-05-04",
+		 "topics": [
+		  "Web Development",
+		  "Python"
+		 ]
+		}
+	
+ERRORS 
+		401 Unauthorized
+		{
+		 "error": {
+		  "code": 401,
+		  "errors": [
+		   {
+		    "domain": "global",
+		    "message": "Authorization required",
+		    "reason": "required"
+		   }
+		  ],
+		  "message": "Authorization required"
+		 }
+		}
+
+		
+*****************************************************************************************
+NAME
+	getConference
+DESCRIPTION
+	given the data store key for a conference, return the conference data
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conference/<websafeConferenceKey>
+PARAMETERS
+	websafeConferenceKey	required, data store key of conference
+METHOD
+	GET
+RETURNS
+	200 OK
+	A dictionary with information on the created conference
+		Sample JSON response
+	{
+	 "city": "City",
+	 "description": "Description of conference",
+	 "endDate": "2016-01-02",
+	 "maxAttendees": "1000",
+	 "month": "1",
+	 "name": "Conference Name",
+	 "organizerDisplayName": "Steven Marr",
+	 "organizerUserId": "marr.stevenmarr@gmail.com",
+	 "seatsAvailable": "1000",
+	 "startDate": "2016-01-01",
+	 "topics": [
+	  "Default",
+	  "Topic"
+	 ],
+	 "websafeKey": "{websafeKey}"
+	}
+ERRORS
+	404 Not Found
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: {websafeKey}",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: {websafeKey}"
+	 }
+	}
+
+*****************************************************************************************
+
+NAME
+	getConferenceSessionsByDate
+
+DESCRIPTION
+	given a conference key, return all the sessions organized by session date and time
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_sessions_by_date/<websafeConferenceKey>
+
+PARAMETERS
+	websafeConferenceKey	required, data store key of conference
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	A json object with all the sessions in the conference, sorted by date and time
+	{
+	 "items": [
+	  {
+	   "date": "2015-08-05",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session Name",
+	   "speaker": "unassigned",
+	   "typeOfSession": [
+	    "Default",
+	    "Topic"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	 }
+
+ERRORS
+	404 Not Found 
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: {websafeKey}",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: {websafeKey}"
+	 }
+	}
+*****************************************************************************************
+
+NAME
+	getConferenceSessionsByType
+
+DESCRIPTION
+	given a conference key, return all the sessions of type specified
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_sessions_by_type/<websafeConferenceKey>
+
+PARAMETERS
+	websafeConferenceKey	required, data store key of conference
+	typeOfSession			required, types of session to filter
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	A json object with all the sessions in the conference, filtered by typeOfSession
+	{
+	 "items": [
+	  {
+	   "date": "2015-08-05",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session Name",
+	   "speaker": "unassigned",
+	   "typeOfSession": [
+	    "Default",
+	    "Topic"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	 }
+
+ERRORS
+	404 Not Found 
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: {websafeKey}",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: {websafeKey}"
+	 }
+	}
+*****************************************************************************************
+NAME
+	getConferencesCreated
+
+DESCRIPTION
+	Return conferences created by user
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/getConferencesCreated
+
+PARAMETERS
+	None
+METHOD
+	POST
+
+RETURNS
+	200 OK
+	A json object with all the conferences created by the user JSON response example
+	{
+	 "items": [
+	  {
+	   "city": "City",
+	   "description": "Conference Description",
+	   "endDate": "2015-09-09",
+	   "maxAttendees": "1000",
+	   "month": "9",
+	   "name": "Conference Name",
+	   "organizerDisplayName": "user display name",
+	   "organizerUserId": "user id",
+	   "seatsAvailable": "1000",
+	   "startDate": "2015-09-07",
+	   "topics": [
+	    "Default",
+	    "Topic"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	 }
+
+ERRORS
+	401 Unauthorized
+	 {
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+*****************************************************************************************
+NAME
+	getConferencesToAttend
+
+DESCRIPTION
+	Return all the conference the user is registed for
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conferences/attending
+	
+PARAMETERS
+	None
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	A json object with all the conferences created by the user JSON response example
+	{
+	 "items": [
+	  {
+	   "city": "City",
+	   "description": "Conference Description",
+	   "endDate": "2015-09-09",
+	   "maxAttendees": "1000",
+	   "month": "9",
+	   "name": "Conference Name",
+	   "organizerDisplayName": "user display name",
+	   "organizerUserId": "user id",
+	   "seatsAvailable": "1000",
+	   "startDate": "2015-09-07",
+	   "topics": [
+	    "Default",
+	    "Topic"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	 }
+
+ERRORS
+	401 Unauthorized
+	 {
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+*****************************************************************************************
+NAME
+	queryConferences
+
+DESCRIPTION
+	Create a custom query to filter conference results against
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/queryConferences
+PARAMETERS
+	Filters
+		Field 		data store field to search by, must be in CAPS (CITY, TOPIC, MONTH, MAX_ATTENDEES)
+		Operator	equality paramter to search by ('EQ', 'GT', 'GTEQ','LT', 'LTEQ', 'NE')
+		Value 		value to filter field against using operator as argument
+METHOD
+	POST
+
+RETURNS
+	200 OK
+	A json object with all the conferences created by the user JSON response example
+	{
+	 "items": [
+	  {
+	   "city": "City",
+	   "description": "Conference Description",
+	   "endDate": "2015-09-09",
+	   "maxAttendees": "1000",
+	   "month": "9",
+	   "name": "Conference Name",
+	   "organizerDisplayName": "user display name",
+	   "organizerUserId": "user id",
+	   "seatsAvailable": "1000",
+	   "startDate": "2015-09-07",
+	   "topics": [
+	    "Default",
+	    "Topic"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	 }
+
+ERRORS
+	400 Bad Request
+	{
+	 "error": {
+	  "code": 400,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Filter contains invalid field or operator.",
+	    "reason": "badRequest"
+	   }
+	  ],
+	  "message": "Filter contains invalid field or operator."
+	 }
+	}
+
+*****************************************************************************************
+NAME
+	getFeaturedSpeaker
+
+DESCRIPTION
+	For a given conference return the featured speakers, those speaking twice
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_featured_speaker/<websafeConferenceKey>
+	
+PARAMETERS
+	<websafeConferenceKey>
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	A json object with all the conferences created by the user JSON response example
+	200 OK
+ 
+- Show headers -
+  
+{
+ "items": [
+  {
+   "name": [
+    "Session 1",
+    "Session 2"
+   ],
+   "speaker": "Session Speaker 1"
+  },
+  {
+   "name": [
+    "Session 3",
+    "Session 4",
+    "Session 5"
+   ],
+   "speaker": "Session Speaker 2"
+  }
+ ]
+}
+
+ERRORS
+	404 Not Found
+	 {
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: <websafeConferenceKey>,
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: <websafeConferenceKey>"
+	 }
+	}
+ 
+*****************************************************************************************
+NAME
+
+DESCRIPTION
+
+URL STRUCTURE
+
+PARAMETERS
+
+METHOD
+
+RETURNS
+
+ERRORS
+
+=========================================================================================
+Sessions
+
+
+*****************************************************************************************
+
+NAME
+	createSession
+
+DESCRIPTION
+	if logged in user is same as user who created conference this call allows for creation
+	of a new session given the conference datastore key
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/session
+
+PARAMETERS
+	name            required, session name, must be unique within conference
+    highlights      optional, brief description of conference defaults to 'None'
+    speaker         name of session speaker, defaults to 'unassigned'
+    duration        optional, length of session in minutes, defaults to 15
+    typeOfSession   optional, list of session topics, defaults to  ["Default","Topic"]
+    date            optional, date session is taking place YYYY-MM-DD, 
+    				defaults to conference start data
+    start_time      optional, start time of sesssion 24HH:MM, defaults to 08:00
+    websafeConferenceKey      required, data store key of conference session belongs to
+
+
+METHOD
+	POST
+
+RETURNS
+	A dictionary with information on the created session
+
+	Sample JSON response
+	{
+	 "alt": "json",
+	 "duration": "15",
+	 "highlights": "None",
+	 "name": "Conference Name",
+	 "speaker": "Session Speaker",
+	 "typeOfSession": [
+	  "Default",
+	  "Topic"
+	 ],
+	 "websafeConferenceKey": "<websafeConferenceKey>"
+	}
+
+ERRORS
+	401 Unauthorized - user not signed in, or incorrect user signed in
+  
+  	{
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+
+	400 Bad Request - name field missing
+  
+	{
+	 "error": {
+	  "code": 400,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Session 'name' field required",
+	    "reason": "badRequest"
+	   }
+	  ],
+	  "message": "Session 'name' field required"
+	 }
+	}
+
+*****************************************************************************************
+NAME
+	getSessions
+
+DESCRIPTION
+	For a given conference return all sessions
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_sessions/{websafeSessionKey}
+
+PARAMETERS
+	websafeConferenceKey      data store key of conference
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	{
+	 "items": [
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 1",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "30",
+	   "highlights": "None",
+	   "name": "Session 2",
+	   "speaker": "Session Speaker 2",
+	   "start_time": "21:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 3",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Workshop"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  }
+	 ]
+	}
+
+ERRORS
+	404 Not Found
+   
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: <websafeConferenceKey>",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: <websafeConferenceKey>"
+	 }
+	}
+*****************************************************************************************
+NAME
+	getSessionsBySpeaker
+
+DESCRIPTION
+	Return sessions across all conferences with specified speaker.
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_sessions_by_speaker/{speaker name}
+
+PARAMETERS
+	speaker name      name of speaker
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	{
+	 "items": [
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 1",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "30",
+	   "highlights": "None",
+	   "name": "Session 2",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "21:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Workshop"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  }
+	 ]
+	}
+
+ERRORS
+	None
+*****************************************************************************************
+NAME
+	addSessionToWishlist
+
+DESCRIPTION
+	adds a session to the users wishlist using the session datastore key
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/add_session_to_wishlist/{websafeSessionKey}
+
+PARAMETERS
+	websafeSessionKey		required, datastore key for session to add to wish list
+
+METHOD
+	GET
+
+RETURNS
+	{
+ 	"data": true
+	}
+
+ERRORS
+	404 Not Found - incorrect websafeSessionKey
+	 {
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No session found with key: {websafeSessionKey}",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No session found with key: {websafeSessionKey}"
+	 }
+	}
+ 	409 Conflict - session already in wishlist
+	 {
+	 "error": {
+	  "code": 409,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "You have already added this session to your wishlist",
+	    "reason": "conflict"
+	   }
+	  ],
+	  "message": "You have already added this session to your wishlist"
+	 }
+	}
+*****************************************************************************************
+NAME
+	getSessionsinWishlist
+
+DESCRIPTION
+	Return sessions in users wishlist
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/get_wish_list_sessions
+
+PARAMETERS
+	None
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	{
+	 "items": [
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 1",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "30",
+	   "highlights": "None",
+	   "name": "Session 2",
+	   "speaker": "Session Speaker 2",
+	   "start_time": "21:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 3",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  }
+	 ]
+	}
+
+ERRORS
+	401 Unauthorized
+	 {
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+*****************************************************************************************
+NAME
+	getTopSessions
+
+DESCRIPTION
+	Return top five conference sessions based on the number of adds to wish lists.
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conf_sessions_by_popularity/<websafeConferenceKey>
+
+PARAMETERS
+	websafeConferenceKey      data store key of conference
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	{
+	 "items": [
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 1",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "30",
+	   "highlights": "None",
+	   "name": "Session 2",
+	   "speaker": "Session Speaker 2",
+	   "start_time": "21:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 3",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 4",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 5",
+	   "speaker": "Session Speaker 3",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  }
+	 ]
+	}
+
+ERRORS
+	401 Unauthorized
+	 {
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+	404 Not Found
+  
+{
+ "error": {
+  "code": 404,
+  "errors": [
+   {
+    "domain": "global",
+    "message": "No conference found with key: <websafeConferenceKey>",
+    "reason": "notFound"
+   }
+  ],
+  "message": "No conference found with key: <websafeConferenceKey>"
+ }
+}
+*****************************************************************************************
+NAME
+	getNonWorkshopAfter7PM
+
+DESCRIPTION
+	For a given conference return non workshop sessions after 7PM
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/no_workshops_after_7PM/{websafeSessionKey}
+
+PARAMETERS
+	websafeConferenceKey      data store key of conference
+
+METHOD
+	GET
+
+RETURNS
+	200 OK
+	{
+	 "items": [
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 1",
+	   "speaker": "Session Speaker 1",
+	   "start_time": "20:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "30",
+	   "highlights": "None",
+	   "name": "Session 2",
+	   "speaker": "Session Speaker 2",
+	   "start_time": "21:00:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  },
+	  {
+	   "date": "2015-09-07",
+	   "duration": "15",
+	   "highlights": "None",
+	   "name": "Session 3",
+	   "speaker": "Session Speaker 3",
+	   "start_time": "20:30:00",
+	   "typeOfSession": [
+	    "Breakout"
+	   ],
+	   "websafeKey": "{websafeKey}"
+	  }
+	 ]
+	}
+
+ERRORS
+	404 Not Found
+   
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: <websafeConferenceKey>",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key: <websafeConferenceKey>"
+	 }
+	}
+
+=========================================================================================
+Registration
+*****************************************************************************************
+
+NAME
+	deleteSessionFromWishlist
+DESCRIPTION
+	given a data store key for a session, removes the session from the users wishlist
+
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/remove_session_from_wishlist/{websafeSessionKey}
+PARAMETERS
+	websafeSessionKey	data store key for session to remove from wish list
+METHOD
+	POST
+RETURNS
+	
+ERRORS
+	401 Unauthorized - user not signed in
+  
+	{
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+
+	409 Conflict - session does not exist in wish list
+  
+	{
+	 "error": {
+	  "code": 409,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "This session does not exist in this users wishlist",
+	    "reason": "conflict"
+	   }
+	  ],
+	  "message": "This session does not exist in this users wishlist"
+	 }
+	}
+*****************************************************************************************
+NAME
+	registerForConference
+DESCRIPTION
+	Register user for selected conference
+URL STRUCTURE
+	https://{{APPSPOT}}/http://localhost:10080/_ah/api/conference/v1/conference/<websafeConferenceKey>
+PARAMETERS	
+	websafeSessionKey	data store key for session to remove from wish list
+METHOD
+	POST
+RETURNS
+	200 OK
+	{
+	 "data": true
+	}
+ 
+ERRORS
+	401 Unauthorized - user not signed in
+  
+	{
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+
+	404 Not Found
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: <websafeConferenceKey>",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key:  <websafeConferenceKey>"
+	 }
+	}
+*****************************************************************************************
+NAME
+	unregisterForConference
+DESCRIPTION
+	Unregister user for selected conference, returns true if succesful or false in unsuccesful
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conference/<websafeConferenceKey>
+PARAMETERS	
+	<websafeConferenceKey>	data store key for session to remove from wish list
+METHOD
+	DELETE
+RETURNS
+	200 OK
+	{
+	 "data": true
+	}
+	
+	200 OK
+	{
+	 "data": false
+	}
+ 
+ 
+ERRORS
+	401 Unauthorized - user not signed in
+  
+	{
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
+
+	404 Not Found
+	{
+	 "error": {
+	  "code": 404,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "No conference found with key: <websafeConferenceKey>",
+	    "reason": "notFound"
+	   }
+	  ],
+	  "message": "No conference found with key:  <websafeConferenceKey>"
+	 }
+	}
+=========================================================================================
+Profile
+*****************************************************************************************
+
+NAME
+	getProfile
+
+DESCRIPTION
+	Return user profile.
+
+URL STRUCTURE
+	https://{appspot}/_ah/api/conference/v1/profile
+PARAMETERS
+	
+METHOD
+	GET
+RETURNS
+	200 OK
+	{
+	 "conferenceKeysToAttend": [
+	  "<websafeConferenceKey>,<websafeConferenceKey>"
+	 ],
+	 "displayName": "user display name",
+	 "mainEmail": "user email",
+	 "teeShirtSize": "TEE SHIRT SIZE"
+	}
+ERRORS
+
+*****************************************************************************************
+NAME
+	saveProfile
+
+DESCRIPTION
+	Saves user profile.
+
+URL STRUCTURE
+	https://{appspot}/_ah/api/conference/v1/profile
+PARAMETERS
+	displayName 	required, display name for user
+	teeShirtSize 	reqired one of the values of:
+					NOT_SPECIFIED 
+				    XS_M 
+				    XS_W 
+				    S_M 
+				    S_W 
+				    M_M 
+				    M_W 
+				    L_M 
+				    L_W 
+				    XL_M 
+				    XL_W 
+				    XXL_M 
+				    XXL_W 
+				    XXXL_M 
+				    XXXL_W 
+METHOD
+	POST
+RETURNS
+	200 OK
+   
+	{
+	 "conferenceKeysToAttend": [
+	  "{websafeConferenceKey_1}",
+	  "{websafeConferenceKey_2}"
+	 ],
+	 "displayName": "User Display Name",
+	 "mainEmail": "user email",
+	 "sessionKeysInWishlist": [
+	  "<websafeSessionKeys>"
+	 ],
+	 "teeShirtSize": "TEE_SHIRT_SIZE"
+	}
+ERRORS
+400 Bad Request - bad value for teeShirtSize
+
+	{
+	 "error": {
+	  "code": 400,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Error parsing ProtoRPC request (Unable to parse request content: Invalid enum value \"\")",
+	    "reason": "badRequest"
+	   }
+	  ],
+	  "message": "Error parsing ProtoRPC request (Unable to parse request content: Invalid enum value \"\")"
+	 }
+	}
+=========================================================================================
+Others
+NAME
+	getAnnoncement
+URL STRUCTURE
+	https://{{APPSPOT}}/_ah/api/conference/v1/conference/announcement/get
+PARAMETERS
+	None
+METHOD
+	GET
+RETURNS
+	200 OK
+ 	{
+	 "data": ""
+	}
+ERRORS
+	401 Unauthorized
+  
+	{
+	 "error": {
+	  "code": 401,
+	  "errors": [
+	   {
+	    "domain": "global",
+	    "message": "Authorization required",
+	    "reason": "required"
+	   }
+	  ],
+	  "message": "Authorization required"
+	 }
+	}
